@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ChessDb Stats - Dashboard</title>
+
+    <!-- Custom fonts -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <img src="img/logo.svg"
+                 alt="...">
+            <div class="sidebar-brand-text mx-3">ChessDb Stats</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-home"></i>
+                <span>Home</span></a>
+        </li>
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-layer-group"></i>
+                <span>My Collections</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Charts
+        </div>
+
+
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-poll"></i>
+                <span>Results</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-calendar"></i>
+                <span>Logistics</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-users"></i>
+                <span>Players</span></a>
+        </li>
+
+
+        <li class="nav-item active">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-chess-board"></i>
+                <span>Square Frequency</span></a>
+        </li>
+
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                            <img class="img-profile rounded-circle"
+                                 src="img/undraw_profile.svg">
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Dashboard - Results</h1>
+                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <i class="fas fa-search"></i> Explore Games</a>
+                </div>
+
+                <div class="row">
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-12 col-lg-12 d-flex justify-content-center">
+                        <div class="card shadow mb-4">
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div id="board-area" >
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>ChessDB Stats</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script type="module">
+
+    import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
+
+    const squares = [{row: '1', col: 'a', freq: 5},
+        {row: '1', col: 'b', freq: 4},
+        {row: '1', col: 'c', freq: 6},
+        {row: '1', col: 'd', freq: 9},
+        {row: '1', col: 'e', freq: 1},
+        {row: '1', col: 'f', freq: 1},
+        {row: '1', col: 'g', freq: 8},
+        {row: '1', col: 'h', freq: 2},
+        {row: '2', col: 'a', freq: 9},
+        {row: '2', col: 'b', freq: 7},
+        {row: '2', col: 'c', freq: 4},
+        {row: '2', col: 'd', freq: 6},
+        {row: '2', col: 'e', freq: 0},
+        {row: '2', col: 'f', freq: 1},
+        {row: '2', col: 'g', freq: 5},
+        {row: '2', col: 'h', freq: 2},
+        {row: '3', col: 'a', freq: 9},
+        {row: '3', col: 'b', freq: 9},
+        {row: '3', col: 'c', freq: 1},
+        {row: '3', col: 'd', freq: 2},
+        {row: '3', col: 'e', freq: 6},
+        {row: '3', col: 'f', freq: 8},
+        {row: '3', col: 'g', freq: 8},
+        {row: '3', col: 'h', freq: 9},
+        {row: '4', col: 'a', freq: 8},
+        {row: '4', col: 'b', freq: 5},
+        {row: '4', col: 'c', freq: 6},
+        {row: '4', col: 'd', freq: 8},
+        {row: '4', col: 'e', freq: 7},
+        {row: '4', col: 'f', freq: 1},
+        {row: '4', col: 'g', freq: 9},
+        {row: '4', col: 'h', freq: 0},
+        {row: '5', col: 'a', freq: 1},
+        {row: '5', col: 'b', freq: 5},
+        {row: '5', col: 'c', freq: 4},
+        {row: '5', col: 'd', freq: 7},
+        {row: '5', col: 'e', freq: 8},
+        {row: '5', col: 'f', freq: 8},
+        {row: '5', col: 'g', freq: 5},
+        {row: '5', col: 'h', freq: 3},
+        {row: '6', col: 'a', freq: 5},
+        {row: '6', col: 'b', freq: 8},
+        {row: '6', col: 'c', freq: 0},
+        {row: '6', col: 'd', freq: 4},
+        {row: '6', col: 'e', freq: 9},
+        {row: '6', col: 'f', freq: 9},
+        {row: '6', col: 'g', freq: 4},
+        {row: '6', col: 'h', freq: 4},
+        {row: '7', col: 'a', freq: 8},
+        {row: '7', col: 'b', freq: 4},
+        {row: '7', col: 'c', freq: 3},
+        {row: '7', col: 'd', freq: 10},
+        {row: '7', col: 'e', freq: 10},
+        {row: '7', col: 'f', freq: 3},
+        {row: '7', col: 'g', freq: 7},
+        {row: '7', col: 'h', freq: 8},
+        {row: '8', col: 'a', freq: 8},
+        {row: '8', col: 'b', freq: 1},
+        {row: '8', col: 'c', freq: 9},
+        {row: '8', col: 'd', freq: 10},
+        {row: '8', col: 'e', freq: 3},
+        {row: '8', col: 'f', freq: 6},
+        {row: '8', col: 'g', freq: 4},
+        {row: '8', col: 'h', freq: 8},];
+
+    const plot = Plot.plot({
+        height: 550,
+        width: 550,
+        color: {scheme: "Greens"},
+        padding: 0,
+        grid: true,
+        y: {type:"band", reverse:true, label:"rows"},
+        x: {type:"band", label: "columns"},
+        marks: [
+            Plot.cell(squares, Plot.group({fill: "max"}, {
+                x: (d) => d.col,
+                y: (d) => d.row,
+                fill: "freq",
+                inset: 0.5,
+            })),
+            Plot.text(squares,{x:"col", y:"row",text:(d)=>d.col.toUpperCase() + d.row}),
+        ]
+    });
+    const div = document.querySelector("#board-area");
+    div.append(plot);
+
+</script>
+
+</body>
+
+</html>
