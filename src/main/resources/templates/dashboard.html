@@ -12,13 +12,13 @@
     <title>ChessDb Stats - Dashboard</title>
 
     <!-- Custom fonts -->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
     <!-- Custom styles -->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
 
 </head>
 
@@ -31,8 +31,8 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-            <img src="img/logo.svg"
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.html">
+            <img th:src="@{/img/logo.svg}"
                  alt="...">
             <div class="sidebar-brand-text mx-3">ChessDb Stats</div>
         </a>
@@ -42,14 +42,14 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="dashboard.html">
                 <i class="fas fa-home"></i>
                 <span>Home</span></a>
         </li>
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="dashboard.html">
                 <i class="fas fa-layer-group"></i>
                 <span>My Collections</span></a>
         </li>
@@ -115,7 +115,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                             <img class="img-profile rounded-circle"
-                                 src="img/undraw_profile.svg">
+                                 th:src="@{/img/undraw_profile.svg}">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -156,13 +156,12 @@
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary">Opening Frequency</h6>
 
-
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
                                 <div id="opening-freq"></div>
                                 <!-- Error Alert -->
-                                <div class="alert alert-danger" role="alert" id="errorAlert" style="display: block;">
+                                <div class="alert alert-danger" role="alert" id="errorAlertOpFreq" style="display: none;">
                                     An error occurred while loading the chart data.
                                 </div>
                             </div>
@@ -186,6 +185,10 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <div id="num-moves-chart"></div>
+                                <!-- Error Alert -->
+                                <div class="alert alert-danger" role="alert" id="errorAlertNumMoves" style="display: none;">
+                                    An error occurred while loading the chart data.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -202,6 +205,10 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <div id="termination-chart"></div>
+                                <!-- Error Alert -->
+                                <div class="alert alert-danger" role="alert" id="errorAlertTermi" style="display: none;">
+                                    An error occurred while loading the chart data.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -220,6 +227,10 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <div id="opening-win-pct"></div>
+                                <!-- Error Alert -->
+                                <div class="alert alert-danger" role="alert" id="errorAlertWP" style="display: none;">
+                                    An error occurred while loading the chart data.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -272,17 +283,17 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="js/index.js"></script>
+<script th:src="@{/js/index.js}"></script>
 </body>
 
 </html>
