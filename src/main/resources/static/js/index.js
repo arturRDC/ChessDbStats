@@ -11,7 +11,7 @@ google.charts.setOnLoadCallback(() => initializePieChart());
 
 
 function fetchOpeningData() {
-    return fetch('/stats/openings') // Replace with your actual backend endpoint
+    return fetch('/api/v1/stats/openings/'+collectionId) // Replace with your actual backend endpoint
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch data from the backend');
@@ -43,7 +43,7 @@ function displayError(id) {
 
 
 function fetchMoveCountData() {
-    return fetch('/stats/move-count') // Replace with your actual backend endpoint
+    return fetch('/api/v1/stats/move-count/'+collectionId) // Replace with your actual backend endpoint
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch data from the backend');
@@ -70,7 +70,7 @@ function initializeHistogram() {
 
 
 function fetchTerminationData() {
-    return fetch('/stats/termination') // Replace with your actual backend endpoint
+    return fetch('/api/v1/stats/termination/'+collectionId) // Replace with your actual backend endpoint
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch data from the backend');
@@ -94,17 +94,6 @@ function initializePieChart() {
             displayError('errorAlertTermi');
         });
 }
-
-//
-// function getTerminationData() {
-//     return [
-//         ['Game termination', 'Number of Games'],
-//         ['Normal', 11],
-//         ['Lost On Time', 2],
-//     ];
-// }
-
-
 
 
 
