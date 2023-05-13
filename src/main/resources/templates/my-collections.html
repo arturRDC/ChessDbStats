@@ -112,9 +112,9 @@
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">My Collections</h1>
                     <div>
-                        <a th:href="@{/create-collection}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+                        <a class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" data-toggle="modal" data-target="#createCollModal">
                             <i class="fas fa-plus-square"></i> New Collection</a>
-                        <a th:href="@{/import-games}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm ml-4">
+                        <a th:href="@{/import-games}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm ml-4" data-toggle="modal" data-target="#importGamesModal">
                             <i class="fas fa-file-import"></i> Import Games</a>
                     </div>
                 </div>
@@ -126,63 +126,24 @@
                 <!-- Content Row -->
 
                 <div class="row">
-                    <div class="col-xl-3 col-lg-3">
+                    <div class="col-xl-3 col-lg-3" th:each="collection : ${collections}" th:id="'collection'+${collection.id}">
                         <div class="card shadow mb-4">
                             <!-- Card Header - Delete Icon -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <a href="#" class="m-0 font-weight-bold text-primary">Collection example</a>
+                                <a th:href="@{/dashboard/{id}(id=${collection.id})}" class="m-0 font-weight-bold text-primary collection-title" th:text="${collection.title}"></a>
                                 <div>
-                                    <a href="" data-toggle="modal" data-target="#deleteCollModal" data-item-id="1">
+                                    <a href="#" data-toggle="modal" data-target="#editCollModal" th:data-item-id="${collection.id}" class="mr-3">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="#" data-toggle="modal" data-target="#deleteCollModal"  th:data-item-id="${collection.id}">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </div>
                             </div>
                             <!-- Card Body -->
-                            <div class="card-body">
-                                This is a collection description text. It's meant to be very short...
-                            </div>
+                            <div class="card-body collection-desc" th:text="${collection.description}"></div>
                             <div class="card-footer text-sm-end">
-                                <small class="text-muted">Last Updated at: 05.06.2023</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Delete Icon -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <a href="#" class="m-0 font-weight-bold text-primary">Collection example</a>
-                                <div>
-                                    <a href="#" data-toggle="modal" data-target="#deleteCollModal" data-item-id="2">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                This is a collection description text. It's meant to be very short...
-                            </div>
-                            <div class="card-footer text-sm-end">
-                                <small class="text-muted">Last Updated at: 05.06.2023</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Delete Icon -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <a href="#" class="m-0 font-weight-bold text-primary">Collection example</a>
-                                <div>
-                                    <a href="#" data-toggle="modal" data-target="#deleteCollModal" data-item-id="3">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                This is a collection description text. It's meant to be very short...
-                            </div>
-                            <div class="card-footer text-sm-end">
-                                <small class="text-muted">Last Updated at: 05.06.2023</small>
+                                <small class="text-muted" th:text="'Last Updated at: ' + ${collection.updatedAt}"></small>
                             </div>
                         </div>
                     </div>
@@ -246,7 +207,107 @@
             <div class="modal-body">Select "Delete" below if you wish to delete this collection. This action can not be undone.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger deleteCollConfirm" href="/api/v1/collections/delete/">Delete</a>
+                <button class="btn btn-danger deleteCollConfirm">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Collection Modal-->
+<div class="modal fade" id="createCollModal" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createCollModalLabel">Create a new collection</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="create-coll-form">
+                    <div class="form-group">
+                        <label for="collectionName">Collection Name:</label>
+                        <input type="text" class="form-control"
+                               id="collectionName"
+                               name="title">
+                    </div>
+                    <div class="form-group">
+                        <label for="collectionDesc">Description:</label>
+                        <textarea class="form-control" id="collectionDesc" rows="3" name="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" id="create-coll-submit">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Collection Modal-->
+<div class="modal fade" id="editCollModal" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCollModalLabel">Edit collection</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-coll-form">
+                    <div class="form-group">
+                        <label for="collectionNameEdit">Collection Name:</label>
+                        <input type="text" class="form-control"
+                               id="collectionNameEdit"
+                               name="title">
+                    </div>
+                    <div class="form-group">
+                        <label for="collectionDescEdit">Description:</label>
+                        <textarea class="form-control" id="collectionDescEdit" rows="3" name="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" id="edit-coll-submit">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import Games Modal-->
+<div class="modal fade" id="importGamesModal" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importGamesModalLabel">Import Games</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="import-games-form">
+                    <div class="form-group">
+                        <label for="importInto">Import into Collection:</label>
+                        <br>
+                        <select id="importInto">
+                            <option th:each="col : ${collections}" th:value="${col.id}" th:text="${col.title}"></option>
+                        </select>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="collectionDesc">Description:</label>
+                        <input class="form-control form-control-lg" type="file" id="pgnFile" name="gamesFile">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" id="importGamesSubmit">Import</button>
             </div>
         </div>
     </div>
