@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<header class="header mb-auto" th:fragment="header(activeTab)">
+    <div class="inner">
+
+        <h3 class="logo"><img th:src="@{/img/logo.svg}" alt="logo"> ChessDb Stats</h3>
+        <nav class="nav nav-header justify-content-center">
+            <a th:class="${activeTab == 'home'} ? 'active nav-link' : 'nav-link'" th:href="@{/home}">Home</a>
+            <a th:class="${activeTab == 'about'} ? 'active nav-link' : 'nav-link'" th:href="@{/about}">About</a>
+            <a th:class="${activeTab == 'login'} ? 'active nav-link' : 'nav-link'" th:href="@{/login}">Login</a>
+            <a th:class="${activeTab == 'register'} ? 'active nav-link' : 'nav-link'" th:href="@{/register}">Register</a>
+        </nav>
+    </div>
+</header>
+</html>

@@ -9,7 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ChessDb Stats - Dashboard</title>
+
+    <title>ChessDb Stats - Explore</title>
 
     <!-- Custom fonts -->
     <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -31,7 +32,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../static/index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="results.html">
             <img th:src="@{/img/logo.svg}"
                  alt="...">
             <div class="sidebar-brand-text mx-3">ChessDb Stats</div>
@@ -42,7 +43,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/home}">
+            <a class="nav-link" href="results.html">
                 <i class="fas fa-home"></i>
                 <span>Home</span></a>
         </li>
@@ -53,39 +54,6 @@
                 <i class="fas fa-layer-group"></i>
                 <span>My Collections</span></a>
         </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Charts
-        </div>
-
-
-        <li class="nav-item ">
-            <a class="nav-link" th:href="@{/dashboard/results/{collectionId}(collectionId=${collectionId})}">
-                <i class="fas fa-poll"></i>
-                <span>Results</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/dashboard/logistics/{collectionId}(collectionId=${collectionId})}">
-                <i class="fas fa-calendar"></i>
-                <span>Logistics</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/dashboard/players/{collectionId}(collectionId=${collectionId})}">
-                <i class="fas fa-users"></i>
-                <span>Players</span></a>
-        </li>
-
-
-        <li class="nav-item active">
-            <a class="nav-link" th:href="@{/dashboard/square-frequency/{collectionId}(collectionId=${collectionId})}">
-                <i class="fas fa-chess-board"></i>
-                <span>Square Frequency</span></a>
-        </li>
-
 
     </ul>
     <!-- End of Sidebar -->
@@ -142,32 +110,14 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Dashboard - Square Frequency</h1>
-                    <a th:href="@{/explore/{collectionId}(collectionId=${collectionId})}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                        <i class="fas fa-search"></i> Explore Games</a>
+                    <h1 class="h3 mb-0 text-gray-800">Explore</h1>
                 </div>
-
-                <div class="row">
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-12 col-lg-12 d-flex justify-content-center">
-                        <div class="card shadow mb-4">
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div id="board-area" ></div>
-
-                                <!-- Error Alert -->
-                                <div class="alert alert-danger" role="alert" id="errorAlertSquares" style="display: none;">
-                                    An error occurred while loading the chart data.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
+                <div class="d-sm-flex align-items-center justify-content-between mb-4 font-weight-light">
+                    <p>Explore the games in this collection.</p>
                 </div>
 
 
+                <div id="board"></div>
 
             </div>
         </div>
@@ -213,6 +163,7 @@
     </div>
 </div>
 
+
 <!-- Bootstrap core JavaScript-->
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
@@ -223,68 +174,7 @@
 <!-- Custom scripts for all pages-->
 <script th:src="@{/js/sb-admin-2.min.js}"></script>
 
-<script th:inline="javascript">
-    const collectionId = [[${collectionId}]];
-</script>
-
-<script type="module">
-
-    import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
-
-    function fetchSquareFrequencies() {
-        return fetch('/api/v1/stats/square-frequencies/'+collectionId)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data from the backend');
-                }
-                return response.json();
-            })
-            .catch(error => {
-                console.error('An error occurred:', error);
-                throw error;
-            });
-    }
-
-    function displayError(id) {
-        document.getElementById(id).style.display = 'block';
-    }
-
-
-    function drawBoardFrequencies(squares) {
-        const plot = Plot.plot({
-            height: 550,
-            width: 550,
-            color: {scheme: "Greens"},
-            padding: 0,
-            grid: true,
-            y: {type:"band", reverse:true, label:"rows"},
-            x: {type:"band", label: "columns"},
-            marks: [
-                Plot.cell(squares, Plot.group({fill: "max"}, {
-                    x: (d) => d.col,
-                    y: (d) => d.row,
-                    fill: "freq",
-                    inset: 0.5,
-                })),
-                Plot.text(squares,{x:"col", y:"row",text:(d)=>d.col.toUpperCase() + d.row}),
-            ]
-        });
-        const div = document.querySelector("#board-area");
-        div.append(plot);
-    }
-
-    fetchSquareFrequencies()
-        .then(data => {
-            let squares = data;
-            drawBoardFrequencies(squares)
-        })
-        .catch(error => {
-            displayError('errorAlertSquares');
-        });
-
-
-
-</script>
+<script type="module" th:src="@{/js/explore.js}" defer></script>
 
 </body>
 

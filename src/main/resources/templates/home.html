@@ -1,0 +1,46 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ChessDb Stats - Home</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+    <link th:href="@{/css/landing.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+</head>
+
+<body class="text-center">
+
+<div class="content-container d-flex h-100 p-3 mx-auto flex-column">
+    <div th:replace="~{fragments/landing-header :: header(home)}"></div>
+
+    <main role="main" class="inner content mb-auto">
+        <h1 class="heading">ChessDb Stats</h1>
+        <p class="lead">A tool to import your chess games into collections and display statistics about them. Import your PGN files and start now!</p>
+        <p class="lead">
+            <a th:href="@{/demo}" class="btn btn-lg btn-info">Try Demo</a>
+            <a th:href="@{/register}" class="btn btn-lg btn-secondary">Register</a>
+        </p>
+    </main>
+
+
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+
+</body>
+</html>
