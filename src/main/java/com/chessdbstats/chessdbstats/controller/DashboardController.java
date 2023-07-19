@@ -1,6 +1,9 @@
 package com.chessdbstats.chessdbstats.controller;
 
 import com.chessdbstats.chessdbstats.model.Player;
+import com.chessdbstats.chessdbstats.model.User;
+import com.chessdbstats.chessdbstats.service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,19 +16,27 @@ import java.util.List;
 @Controller
 @RequestMapping("dashboard/")
 public class DashboardController {
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
     @GetMapping("{collectionId}")
     String getDashboard(Model model, @PathVariable("collectionId") Integer collectionId) {
         model.addAttribute("collectionId", collectionId);
+        User loggedInUser = customUserDetailsService.getLoggedInUser();
+        model.addAttribute("loggedInUser", loggedInUser);
         return "results";
     }
     @GetMapping("results/{collectionId}")
     String getResults(Model model, @PathVariable("collectionId") Integer collectionId) {
         model.addAttribute("collectionId", collectionId);
+        User loggedInUser = customUserDetailsService.getLoggedInUser();
+        model.addAttribute("loggedInUser", loggedInUser);
         return "results";
     }
     @GetMapping("logistics/{collectionId}")
     String getLogistics(Model model, @PathVariable("collectionId") Integer collectionId) {
         model.addAttribute("collectionId", collectionId);
+        User loggedInUser = customUserDetailsService.getLoggedInUser();
+        model.addAttribute("loggedInUser", loggedInUser);
         return "logistics";
     }
     @GetMapping("players/{collectionId}")
@@ -45,11 +56,15 @@ public class DashboardController {
         players.add(new Player("Player 10", 8, 7, 2, 17));
 
         model.addAttribute("players", players);
+        User loggedInUser = customUserDetailsService.getLoggedInUser();
+        model.addAttribute("loggedInUser", loggedInUser);
         return "players";
     }
     @GetMapping("square-frequency/{collectionId}")
     String getSquareFrequency(Model model, @PathVariable("collectionId") Integer collectionId) {
         model.addAttribute("collectionId", collectionId);
+        User loggedInUser = customUserDetailsService.getLoggedInUser();
+        model.addAttribute("loggedInUser", loggedInUser);
         return "square-frequency";
     }
 }

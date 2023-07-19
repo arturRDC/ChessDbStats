@@ -42,7 +42,7 @@ public class SecurityConfig  {
                 .authorizeRequests()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/resources/**", "/static/**", "/vendor/**", "/js/**", "/css/**", "/img/**").permitAll()
-                .requestMatchers("/","/home", "/login", "/register", "/demo", "/about").permitAll()
+                .requestMatchers("/","/home", "/login", "/register", "/demo", "/about", "/edit-profile").permitAll()
 
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

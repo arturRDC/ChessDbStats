@@ -11,9 +11,12 @@ public class RegisterReqUserMapper implements Function<RegisterReq, User> {
 
     @Override
     public User apply(RegisterReq registerReq) {
-        return new User(
+        User user = new User(
                 registerReq.getEmail(),
                 registerReq.getPassword()
         );
+        user.setFirstName(registerReq.getFirstName());
+        user.setLastName(registerReq.getLastName());
+        return user;
     }
 }

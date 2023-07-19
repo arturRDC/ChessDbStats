@@ -41,7 +41,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    private Claims parseJwtClaims(String token) {
+    public Claims parseJwtClaims(String token) {
         return jwtParser.parseClaimsJws(token).getBody();
     }
 
@@ -82,7 +82,6 @@ public class JwtUtil {
             return cookieJwt;
         } else if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
             String token = bearerToken.substring(TOKEN_PREFIX.length());
-            // Add validation for the token format if necessary
             return token;
         }
 
