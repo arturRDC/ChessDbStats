@@ -32,7 +32,7 @@ public class User {
     }
 
     public User() {
-
+        this.profilePicture = "/img/default_profile.svg";
     }
 
     public String getEmail() {

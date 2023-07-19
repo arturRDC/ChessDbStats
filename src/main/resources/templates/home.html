@@ -26,7 +26,7 @@
         <h1 class="heading">ChessDb Stats</h1>
         <p class="lead">A tool to import your chess games into collections and display statistics about them. Import your PGN files and start now!</p>
         <p class="lead">
-            <a th:href="@{/demo}" class="btn btn-lg btn-info">Try Demo</a>
+            <button class="btn btn-lg btn-info" onclick="sendData()">Try Demo</button>
             <a th:href="@{/register}" class="btn btn-lg btn-secondary">Register</a>
         </p>
     </main>
@@ -40,7 +40,8 @@
 <!-- Bootstrap core JavaScript-->
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
 
 </body>
 </html>

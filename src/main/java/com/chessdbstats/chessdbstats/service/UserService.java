@@ -18,6 +18,10 @@ public class UserService {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+    public void addUser(User user) {
+        userRepositoryImpl.saveUser(user);
+    }
+
     public void updateUser(EditUserForm editUserForm, Long id) throws Exception {
         Optional<User> userOpt = userRepositoryImpl.findUserById(id);
         User loggedInUser = customUserDetailsService.getLoggedInUser();
