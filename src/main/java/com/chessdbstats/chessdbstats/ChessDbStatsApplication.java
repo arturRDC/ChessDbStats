@@ -23,7 +23,7 @@ public class ChessDbStatsApplication implements CommandLineRunner {
         demo.setEmail("demo@email.com");
         demo.setPassword("demo");
         demo.setFirstName("Demo");
-        demo.setLastName("Demo");
+        demo.setLastName("Demo last name");
         userService.addUser(demo);
 
     }

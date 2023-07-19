@@ -134,19 +134,19 @@
 
                                             <form class="user">
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control form-control-user"
+                                                    <input type="text"class="form-control form-control-user"
                                                            id="InputFirstName" aria-describedby="firstName"
-                                                           placeholder="First Name">
+                                                           placeholder="First Name" th:value="${loggedInUser.firstName}">
                                                 </div>
                                                 <div class="form-group">
                                                     <input type="text" class="form-control form-control-user"
                                                            id="InputLastName" aria-describedby="LastName"
-                                                           placeholder="Last Name">
+                                                           placeholder="Last Name" th:value="${loggedInUser.lastName}">
                                                 </div>
                                                 <div class="form-group">
                                                     <input type="email" class="form-control form-control-user"
                                                            id="InputEmail" aria-describedby="emailHelp"
-                                                           placeholder="Email Address">
+                                                           placeholder="Email Address" th:value="${loggedInUser.email}">
                                                 </div>
                                                 <div class="form-group">
                                                     <input type="password" class="form-control form-control-user" id="user-password"
