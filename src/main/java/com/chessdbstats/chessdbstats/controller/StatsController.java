@@ -257,7 +257,6 @@ public class StatsController {
             } else {
                 currentTime = tc.toString();
             }
-            System.out.println(currentTime);
             if (!timeData.containsKey(currentTime)) {
                 timeData.put(currentTime, 1);
             } else {
@@ -279,17 +278,46 @@ public class StatsController {
     }
     @GetMapping("api/v1/stats/dates/{collectionId}")
     public ResponseEntity<String> getDates(@PathVariable("collectionId") Long collectionId) {
+        Collection col = collectionService.getCollectionById(collectionId);
+        PgnHolder pgnHolder = new PgnHolder(col.getPgnPath());
+        try {
+            pgnHolder.loadPgn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
+        Map<String, Integer> datesData = new HashMap<>();
+        String currentDate;
+        for (Game game : pgnHolder.getGames()) {
+            currentDate = game.getDate();
+            if (currentDate == null) {
+                currentDate = "Unknown";
+            }
+            if (!datesData.containsKey(currentDate)) {
+                datesData.put(currentDate, 1);
+            } else {
+                int count = datesData.get(currentDate);
+                datesData.put(currentDate, count + 1);
+            }
+        }
+        Object[][] data = new Object[datesData.size() + 1][2];
+        data[0] = new Object[]{"Date", "Number of games"};
+        int index = 1;
+        for (Map.Entry<String, Integer> entry : datesData.entrySet()) {
+            data[index][0] = entry.getKey();
+            data[index][1] = entry.getValue();
+            index++;
+        }
 
-        Object[][] data = {
-                {"Date", "Number of Games"},
-                {"2023.05.27", 8},
-                {"2023.04.27", 15},
-                {"2023.02.14", 12},
-                {"2022.04.28", 20},
-                {"2022.04.29", 7},
-                {"2022.04.30", 2},
-        };
+//        Object[][] data = {
+//                {"Date", "Number of Games"},
+//                {"2023.05.27", 8},
+//                {"2023.04.27", 15},
+//                {"2023.02.14", 12},
+//                {"2022.04.28", 20},
+//                {"2022.04.29", 7},
+//                {"2022.04.30", 2},
+//        };
         Gson gson = new Gson();
         String json = gson.toJson(data);
         return ResponseEntity.ok(json);
