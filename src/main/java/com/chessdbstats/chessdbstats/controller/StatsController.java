@@ -155,7 +155,33 @@ public class StatsController {
     // Logistics Page
     @GetMapping("api/v1/stats/events/{collectionId}")
     public ResponseEntity<String> getEvents(@PathVariable("collectionId") Long collectionId) {
-        Object[][] data = {{"Event", "Number of games"}, {"World Chess Championship 2023", 54}, {"Lichess Tournament", 28}, {"No Event", 61}};
+        Collection col = collectionService.getCollectionById(collectionId);
+        PgnHolder pgnHolder = new PgnHolder(col.getPgnPath());
+        try {
+            pgnHolder.loadPgn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Map<String, Integer> eventsData = new HashMap<>();
+        String currentEvent;
+        for (Game game : pgnHolder.getGames()) {
+            currentEvent = game.getRound().getEvent().getName();
+            if (!eventsData.containsKey(currentEvent)) {
+                eventsData.put(currentEvent, 1);
+            } else {
+                int count = eventsData.get(currentEvent);
+                eventsData.put(currentEvent, count + 1);
+            }
+        }
+        Object[][] data = new Object[eventsData.size() + 1][2];
+        data[0] = new Object[]{"Event", "Number of games"};
+        int index = 1;
+        for (Map.Entry<String, Integer> entry : eventsData.entrySet()) {
+            data[index][0] = entry.getKey();
+            data[index][1] = entry.getValue();
+            index++;
+        }
 
         Gson gson = new Gson();
         String json = gson.toJson(data);
