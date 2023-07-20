@@ -22,9 +22,6 @@ public class MyCollectionsController {
     String getDashboard(Model model) {
         List<CollectionView> collections = collectionService.listCollections();
 
-        collections.add(new CollectionView(1L,"title1", "description1", "05.06.2023"));
-        collections.add(new CollectionView(2L,"title2", "description2", "05.07.2023"));
-        collections.add(new CollectionView(3L,"title3", "description3", "05.08.2023"));
         model.addAttribute("collections",collections);
         User loggedInUser = customUserDetailsService.getLoggedInUser();
         model.addAttribute("loggedInUser", loggedInUser);
