@@ -1,38 +1,108 @@
 package com.chessdbstats.chessdbstats.controller;
 
+import com.chessdbstats.chessdbstats.model.Collection;
+import com.chessdbstats.chessdbstats.service.ChessOpeningsService;
+import com.chessdbstats.chessdbstats.service.CollectionService;
+import com.github.bhlangonijr.chesslib.game.Game;
+import com.github.bhlangonijr.chesslib.game.GameResult;
+import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class StatsController {
 
-    // Results Page
+    @Autowired
+    CollectionService collectionService;
+    @Autowired
+    ChessOpeningsService chessOpeningsService;
+
     @GetMapping("api/v1/stats/openings/{collectionId}")
-    public static ResponseEntity<String> getOpenings(@PathVariable("collectionId") Integer collectionId) {
-        Object[][] data = {{"Opening", "Wins", "Draws", "Losses", "Number of games"}, {"King's Gambit", 10, 24, 20, 54}, {"Catalan", 28, 19, 29, 76}, {"English", 16, 22, 23, 61}, {"Spanish", 16, 22, 23, 61}, {"Italian", 16, 22, 23, 61}};
+    public ResponseEntity<String> getOpenings(@PathVariable("collectionId") Long collectionId) {
+        Collection col = collectionService.getCollectionById(collectionId);
+        PgnHolder pgnHolder = new PgnHolder(col.getPgnPath());
+        try {
+            pgnHolder.loadPgn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Map<String, int[]> openingData = new HashMap<>();
+        for (Game game : pgnHolder.getGames()) {
+            String opening = game.getOpening();
+            if (opening == null) {
+                if (game.getEco() != null) {
+                    String eco = game.getEco();
+                    opening = ChessOpeningsService.getOpeningName(eco);
+                } else {
+                    opening = "Unknown Opening";
+                }
+
+            }
+            if (!openingData.containsKey(opening)) {
+                openingData.put(opening, new int[4]); // Index 0 for White Wins, 1 for Draws, 2 for Black Wins, 3 for Number of games
+            }
+            if (game.getResult() == GameResult.WHITE_WON) {
+                openingData.get(opening)[0]++; // Incrementing white wins for that opening
+            }
+            if (game.getResult() == GameResult.DRAW) {
+                openingData.get(opening)[1]++; // Incrementing draws for that opening
+            }
+            if (game.getResult() == GameResult.BLACK_WON) {
+                openingData.get(opening)[2]++; // Incrementing black wins for that opening
+            }
+            openingData.get(opening)[3]++; // Incrementing number of games for that opening
+        }
+
+// Converting the hashmap data to the required format
+        Object[][] data = new Object[openingData.size() + 1][5]; // 5 columns
+        data[0] = new Object[]{"Opening", "White Wins", "Draws", "Black Wins", "Number of games"};
+
+        int i = 1;
+        for (String opening : openingData.keySet()) {
+            data[i][0] = opening;
+            data[i][1] = openingData.get(opening)[0]; // White Wins
+            data[i][2] = openingData.get(opening)[1]; // Draws
+            data[i][3] = openingData.get(opening)[2]; // Black Wins
+            data[i][4] = openingData.get(opening)[3]; // Number of games
+            i++;
+        }
+
+        // Sorting the array based on the number of games
+        Arrays.sort(data, 1, data.length, new Comparator<Object[]>() {
+            @Override
+            public int compare(Object[] o1, Object[] o2) {
+                int games1 = (int) o1[4];
+                int games2 = (int) o2[4];
+                return games2 - games1; // Sort in descending order of number of games
+            }
+        });
+
+        // Extracting the top 6 entries
+        Object[][] topEntries = Arrays.copyOfRange(data, 0, Math.min(7, data.length));
+
 
         Gson gson = new Gson();
-        String json = gson.toJson(data);
+        String json = gson.toJson(topEntries);
         return ResponseEntity.ok(json);
     }
 
 
     @GetMapping("api/v1/stats/move-count/{collectionId}")
-    public static ResponseEntity<String> getMoveCount(@PathVariable("collectionId") Integer collectionId) {
+    public ResponseEntity<String> getMoveCount(@PathVariable("collectionId") Long collectionId) {
                 Object[][] data = {{"# of Moves"}, {12.2}, {9.1}, {12.2}, {22.9}, {0.9}, {36.6}, {9.1}, {30.5}, {6.1}, {2.7}, {0.9}, {2.7}, {27.1}, {3.4}, {5.5}, {21.0}, {7.9}, {1.2}, {4.6}, {1.5}, {7.9}, {2.0}, {45.7}, {12.2}, {30.5}, {15.2}, {30.5}, {1.8}};
         Gson gson = new Gson();
         String json = gson.toJson(data);
         return ResponseEntity.ok(json);
     }
     @GetMapping("api/v1/stats/termination/{collectionId}")
-    public static ResponseEntity<String> getTemination(@PathVariable("collectionId") Integer collectionId) {
+    public ResponseEntity<String> getTemination(@PathVariable("collectionId") Long collectionId) {
 
 
                 Object[][] data = {
@@ -47,7 +117,7 @@ public class StatsController {
 
     // Logistics Page
     @GetMapping("api/v1/stats/events/{collectionId}")
-    public static ResponseEntity<String> getEvents(@PathVariable("collectionId") Integer collectionId) {
+    public ResponseEntity<String> getEvents(@PathVariable("collectionId") Long collectionId) {
         Object[][] data = {{"Event", "Number of games"}, {"World Chess Championship 2023", 54}, {"Lichess Tournament", 28}, {"No Event", 61}};
 
         Gson gson = new Gson();
@@ -56,7 +126,7 @@ public class StatsController {
     }
 
     @GetMapping("api/v1/stats/sites/{collectionId}")
-    public static ResponseEntity<String> getSites(@PathVariable("collectionId") Integer collectionId) {
+    public ResponseEntity<String> getSites(@PathVariable("collectionId") Long collectionId) {
 
 
         Object[][] data = {
@@ -70,7 +140,7 @@ public class StatsController {
         return ResponseEntity.ok(json);
     }
     @GetMapping("api/v1/stats/time-controls/{collectionId}")
-    public static ResponseEntity<String> getTimeControls(@PathVariable("collectionId") Integer collectionId) {
+    public ResponseEntity<String> getTimeControls(@PathVariable("collectionId") Long collectionId) {
 
 
         Object[][] data = {
@@ -84,7 +154,7 @@ public class StatsController {
         return ResponseEntity.ok(json);
     }
     @GetMapping("api/v1/stats/dates/{collectionId}")
-    public static ResponseEntity<String> getDates(@PathVariable("collectionId") Integer collectionId) {
+    public ResponseEntity<String> getDates(@PathVariable("collectionId") Long collectionId) {
 
 
         Object[][] data = {
@@ -101,7 +171,7 @@ public class StatsController {
         return ResponseEntity.ok(json);
     }
     @GetMapping("api/v1/stats/square-frequencies/{collectionId}")
-    public static ResponseEntity<String> getSquareFrequencies(@PathVariable("collectionId") Integer collectionId) {
+    public ResponseEntity<String> getSquareFrequencies(@PathVariable("collectionId") Long collectionId) {
         List<Map<String,Object>> squares = new ArrayList<>();
         squares.add(Map.of("row", '1', "col", 'a', "freq", 5));
         squares.add(Map.of("row", '1', "col", 'b', "freq", 4));

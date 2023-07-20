@@ -43,7 +43,7 @@ public class ChessDbStatsApplication implements CommandLineRunner {
 
 
 
-        Collection col = new Collection(demo,"Fischer Games", "Some games from the legend Bobby Fischer");
+        Collection col = new Collection(demo,"Lichess Rapid", "Some games from a lichess rapid tournament");
         collectionService.createCollection(col);
         fileManipulationService.appendFiles(col.getPgnPath(), Paths.get("games", "demo1.pgn").toString());
 
