@@ -6,6 +6,7 @@ import com.chessdbstats.chessdbstats.service.CollectionService;
 import com.github.bhlangonijr.chesslib.game.Game;
 import com.github.bhlangonijr.chesslib.game.GameResult;
 import com.github.bhlangonijr.chesslib.game.Termination;
+import com.github.bhlangonijr.chesslib.game.TimeControl;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -221,12 +222,6 @@ public class StatsController {
             index++;
         }
 
-//        Object[][] data = {
-//                {"Site / Location", "Number of Games"},
-//                {"Lichess.org", 300},
-//                {"Chess.com", 200},
-//                {"Clube Natal RN", 12},
-//        };
         Gson gson = new Gson();
         String json = gson.toJson(data);
         return ResponseEntity.ok(json);
@@ -245,14 +240,39 @@ public class StatsController {
 
     @GetMapping("api/v1/stats/time-controls/{collectionId}")
     public ResponseEntity<String> getTimeControls(@PathVariable("collectionId") Long collectionId) {
+        Collection col = collectionService.getCollectionById(collectionId);
+        PgnHolder pgnHolder = new PgnHolder(col.getPgnPath());
+        try {
+            pgnHolder.loadPgn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-
-        Object[][] data = {
-                {"Time Control", "Number of Games"},
-                {"3/2", 300},
-                {"2/1", 200},
-                {"1/0", 12},
-        };
+        Map<String, Integer> timeData = new HashMap<>();
+        String currentTime;
+        for (Game game : pgnHolder.getGames()) {
+            TimeControl tc = game.getRound().getEvent().getTimeControl();
+            if(tc == null) {
+                currentTime = "Unknown";
+            } else {
+                currentTime = tc.toString();
+            }
+            System.out.println(currentTime);
+            if (!timeData.containsKey(currentTime)) {
+                timeData.put(currentTime, 1);
+            } else {
+                int count = timeData.get(currentTime);
+                timeData.put(currentTime, count + 1);
+            }
+        }
+        Object[][] data = new Object[timeData.size() + 1][2];
+        data[0] = new Object[]{"Time Control", "Number of games"};
+        int index = 1;
+        for (Map.Entry<String, Integer> entry : timeData.entrySet()) {
+            data[index][0] = entry.getKey();
+            data[index][1] = entry.getValue();
+            index++;
+        }
         Gson gson = new Gson();
         String json = gson.toJson(data);
         return ResponseEntity.ok(json);
