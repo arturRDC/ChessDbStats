@@ -5,6 +5,7 @@ import com.chessdbstats.chessdbstats.service.ChessOpeningsService;
 import com.chessdbstats.chessdbstats.service.CollectionService;
 import com.github.bhlangonijr.chesslib.game.Game;
 import com.github.bhlangonijr.chesslib.game.GameResult;
+import com.github.bhlangonijr.chesslib.game.Termination;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +97,6 @@ public class StatsController {
 
     @GetMapping("api/v1/stats/move-count/{collectionId}")
     public ResponseEntity<String> getMoveCount(@PathVariable("collectionId") Long collectionId) {
-
         Collection col = collectionService.getCollectionById(collectionId);
         PgnHolder pgnHolder = new PgnHolder(col.getPgnPath());
         try {
@@ -120,12 +120,32 @@ public class StatsController {
     }
     @GetMapping("api/v1/stats/termination/{collectionId}")
     public ResponseEntity<String> getTemination(@PathVariable("collectionId") Long collectionId) {
+        Collection col = collectionService.getCollectionById(collectionId);
+        PgnHolder pgnHolder = new PgnHolder(col.getPgnPath());
+        try {
+            pgnHolder.loadPgn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
+        int normal = 0;
+        int lostTime = 0;
+        int abandoned = 0;
+        for (Game game : pgnHolder.getGames()) {
+            if(game.getTermination() == Termination.TIME || game.getTermination() == Termination.TIME_FORFEIT) {
+                lostTime++;
+            } else if (game.getTermination() == Termination.NORMAL) {
+                normal++;
+            } else if (game.getTermination() == Termination.ABANDONED){
+                abandoned++;
+            }
+        }
 
-                Object[][] data = {
+        Object[][] data = {
                         {"Game termination", "Number of Games"},
-                        {"Normal", 11},
-                        {"Lost On Time", 2},
+                        {"Normal", normal},
+                        {"Lost On Time", lostTime},
+                        {"Abandoned", abandoned},
                 };
         Gson gson = new Gson();
         String json = gson.toJson(data);
