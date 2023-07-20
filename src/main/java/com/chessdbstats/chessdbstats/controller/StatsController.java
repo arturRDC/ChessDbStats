@@ -96,7 +96,24 @@ public class StatsController {
 
     @GetMapping("api/v1/stats/move-count/{collectionId}")
     public ResponseEntity<String> getMoveCount(@PathVariable("collectionId") Long collectionId) {
-                Object[][] data = {{"# of Moves"}, {12.2}, {9.1}, {12.2}, {22.9}, {0.9}, {36.6}, {9.1}, {30.5}, {6.1}, {2.7}, {0.9}, {2.7}, {27.1}, {3.4}, {5.5}, {21.0}, {7.9}, {1.2}, {4.6}, {1.5}, {7.9}, {2.0}, {45.7}, {12.2}, {30.5}, {15.2}, {30.5}, {1.8}};
+
+        Collection col = collectionService.getCollectionById(collectionId);
+        PgnHolder pgnHolder = new PgnHolder(col.getPgnPath());
+        try {
+            pgnHolder.loadPgn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Object[][] data = new Object[pgnHolder.getGames().size() + 1][1];
+        data[0] = new Object[]{"# of Moves"};
+
+        int index = 1;
+        for (Game game : pgnHolder.getGames()) {
+            data[index][0] = Integer.parseInt(game.getPlyCount());
+            index++;
+        }
+
         Gson gson = new Gson();
         String json = gson.toJson(data);
         return ResponseEntity.ok(json);
