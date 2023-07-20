@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 public class StatsController {
@@ -134,10 +136,10 @@ public class StatsController {
         for (Game game : pgnHolder.getGames()) {
             if(game.getTermination() == Termination.TIME || game.getTermination() == Termination.TIME_FORFEIT) {
                 lostTime++;
-            } else if (game.getTermination() == Termination.NORMAL) {
-                normal++;
             } else if (game.getTermination() == Termination.ABANDONED){
                 abandoned++;
+            } else {
+                normal++;
             }
         }
 
@@ -190,18 +192,57 @@ public class StatsController {
 
     @GetMapping("api/v1/stats/sites/{collectionId}")
     public ResponseEntity<String> getSites(@PathVariable("collectionId") Long collectionId) {
+        Collection col = collectionService.getCollectionById(collectionId);
+        PgnHolder pgnHolder = new PgnHolder(col.getPgnPath());
+        try {
+            pgnHolder.loadPgn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
+        Map<String, Integer> sitesData = new HashMap<>();
+        String currentSite;
+        for (Game game : pgnHolder.getGames()) {
+            currentSite = game.getRound().getEvent().getSite();
+            currentSite = parseSiteString(currentSite);
+            if (!sitesData.containsKey(currentSite)) {
+                sitesData.put(currentSite, 1);
+            } else {
+                int count = sitesData.get(currentSite);
+                sitesData.put(currentSite, count + 1);
+            }
+        }
+        Object[][] data = new Object[sitesData.size() + 1][2];
+        data[0] = new Object[]{"Sites / Location", "Number of games"};
+        int index = 1;
+        for (Map.Entry<String, Integer> entry : sitesData.entrySet()) {
+            data[index][0] = entry.getKey();
+            data[index][1] = entry.getValue();
+            index++;
+        }
 
-        Object[][] data = {
-                {"Site / Location", "Number of Games"},
-                {"Lichess.org", 300},
-                {"Chess.com", 200},
-                {"Clube Natal RN", 12},
-        };
+//        Object[][] data = {
+//                {"Site / Location", "Number of Games"},
+//                {"Lichess.org", 300},
+//                {"Chess.com", 200},
+//                {"Clube Natal RN", 12},
+//        };
         Gson gson = new Gson();
         String json = gson.toJson(data);
         return ResponseEntity.ok(json);
     }
+
+    private static String parseSiteString(String input) {
+        Pattern pattern = Pattern.compile("(https?://)?(www\\.)?([a-zA-Z0-9]+)\\.([a-zA-Z]+).*");
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            return matcher.group(3) + "." + matcher.group(4);
+        } else {
+            return input;
+        }
+    }
+
     @GetMapping("api/v1/stats/time-controls/{collectionId}")
     public ResponseEntity<String> getTimeControls(@PathVariable("collectionId") Long collectionId) {
 
