@@ -7,7 +7,7 @@ import com.chessdbstats.chessdbstats.model.request.LoginReq;
 import com.chessdbstats.chessdbstats.model.request.RegisterReq;
 import com.chessdbstats.chessdbstats.model.response.ErrorRes;
 import com.chessdbstats.chessdbstats.model.response.LoginRes;
-import com.chessdbstats.chessdbstats.repository.UserRepositoryImpl;
+import com.chessdbstats.chessdbstats.repository.UserRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     @Autowired
-    private UserRepositoryImpl userRepositoryImpl;
+    private UserRepositoryCustom userRepositoryCustom;
     @Autowired
     private RegisterReqUserMapper mapper;
 
@@ -43,7 +43,7 @@ public class AuthController {
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(), loginReq.getPassword()));
             String email = authentication.getName();
-            User user = userRepositoryImpl.findUserByEmail(email);
+            User user = userRepositoryCustom.findUserByEmail(email);
             String token = jwtUtil.createToken(user);
             LoginRes loginRes = new LoginRes(email,token);
 
@@ -61,8 +61,8 @@ public class AuthController {
     @ResponseBody
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public ResponseEntity<Object> register(@RequestBody RegisterReq registerReq)  {
-        User user = userRepositoryImpl.saveUser(mapper.apply(registerReq));
-        String email = userRepositoryImpl.findUserByEmail(user.getEmail()).getEmail();
+        User user = userRepositoryCustom.saveUser(mapper.apply(registerReq));
+        String email = userRepositoryCustom.findUserByEmail(user.getEmail()).getEmail();
         return ResponseEntity.status(HttpStatus.OK).body(email);
     }
 }

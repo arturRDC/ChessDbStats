@@ -5,6 +5,7 @@ import com.chessdbstats.chessdbstats.controller.EditCollectionFormData;
 import com.chessdbstats.chessdbstats.mapper.CollectionCollectionViewMapper;
 import com.chessdbstats.chessdbstats.model.Collection;
 import com.chessdbstats.chessdbstats.repository.CollectionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,15 +23,14 @@ import java.util.stream.Collectors;
 @Service
 public class CollectionService {
 
-    private final CollectionRepository collectionRepository;
+    @Autowired
+    private CollectionRepository collectionRepository;
     @Autowired
     FileManipulationService fileManipulationService;
     @Autowired
     CollectionCollectionViewMapper collectionCollectionViewMapper;
 
-    public CollectionService(CollectionRepository collectionRepository) {
-        this.collectionRepository = collectionRepository;
-    }
+
 
     public Collection createCollection(Collection collection) {
         Collection col =  collectionRepository.save(collection);

@@ -1,12 +1,8 @@
 package com.chessdbstats.chessdbstats.service;
 
-import com.chessdbstats.chessdbstats.auth.JwtUtil;
 import com.chessdbstats.chessdbstats.model.User;
-import com.chessdbstats.chessdbstats.repository.UserRepositoryImpl;
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
+import com.chessdbstats.chessdbstats.repository.UserRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,13 +16,13 @@ import java.util.List;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
-    private UserRepositoryImpl userRepositoryImpl;
+    private UserRepositoryCustom userRepositoryCustom;
 
     public User getLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             String email = authentication.getName();
-            return userRepositoryImpl.findUserByEmail(email);
+            return userRepositoryCustom.findUserByEmail(email);
         } else {
             return null;
         }
@@ -34,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepositoryImpl.findUserByEmail(email);
+        User user = userRepositoryCustom.findUserByEmail(email);
         List<String> roles = new ArrayList<>();
         roles.add("USER");
         UserDetails userDetails =

@@ -23,9 +23,11 @@ public class CollectionController {
     CollectionService collectionService;
     @Autowired
     CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    UserService userService;
+
     @DeleteMapping("/{id}")
     ResponseEntity<String> deleteCollection(@PathVariable("id") Long id) {
-        System.out.println("deleted " + id);
         collectionService.deleteCollectionById(id);
         return ResponseEntity.ok(id.toString());
     }
@@ -47,21 +49,30 @@ public class CollectionController {
             System.out.println("Error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
         }
+
+        Boolean valid = userService.validateUserHasCollection(id);
+        if (!valid) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to update this collection");
+        }
         collectionService.updateCollection(formData);
 
-        return ResponseEntity.status(HttpStatus.OK).body(formData.title() + " " + formData.description());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Collection updated.");
     }
 
-@PostMapping("/{id}/upload-games")
-public ResponseEntity<String> uploadGames(@RequestParam MultipartFile gamesFile, @PathVariable Long id) {
-    try {
-        collectionService.uploadGames(gamesFile, id);
-        return ResponseEntity.status(HttpStatus.OK).body("File uploaded successfully");
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    @PostMapping("/{id}/upload-games")
+    public ResponseEntity<String> uploadGames(@RequestParam MultipartFile gamesFile, @PathVariable Long id) {
+        Boolean valid = userService.validateUserHasCollection(id);
+        if (!valid) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to upload to this collection");
+        }
+        try {
+            collectionService.uploadGames(gamesFile, id);
+            return ResponseEntity.status(HttpStatus.OK).body("File uploaded successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
-}
-
 }

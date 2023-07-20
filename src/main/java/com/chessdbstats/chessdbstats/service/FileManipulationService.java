@@ -50,7 +50,7 @@ public class FileManipulationService {
 
         // Create an empty file
         if (file.createNewFile()) {
-            System.out.println("File created: " + file.getName());
+            return;
         } else {
             throw new IOException("File creation failed. File may already exist.");
         }
