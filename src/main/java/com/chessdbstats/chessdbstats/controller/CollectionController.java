@@ -24,8 +24,9 @@ public class CollectionController {
     @Autowired
     CustomUserDetailsService customUserDetailsService;
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteCollection(@PathVariable("id") Integer id) {
+    ResponseEntity<String> deleteCollection(@PathVariable("id") Long id) {
         System.out.println("deleted " + id);
+        collectionService.deleteCollectionById(id);
         return ResponseEntity.ok(id.toString());
     }
 
@@ -35,28 +36,6 @@ public class CollectionController {
             System.out.println("error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
         }
-        System.out.println("created collection");
-//        PgnHolder pgn = new PgnHolder("Fischer.pgn");
-//        try {
-//            pgn.loadPgn();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-
-//        PgnIterator games = null;
-//        try {
-//            games = new PgnIterator("chusa23.pgn");
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-////        PgnIterator games = new PgnIterator("Fischer.pgn");
-//
-//        for (Game game: games) {
-//            System.out.println(game.getWhitePlayer());
-//
-//        }
-        System.out.println(formData.getTitle() + " " + formData.getDescription());
-
         User loggedInUser = customUserDetailsService.getLoggedInUser();
         collectionService.createCollection(new Collection(loggedInUser,formData.getTitle(), formData.getDescription()));
         return ResponseEntity.status(HttpStatus.OK).body("Created collection!");
@@ -68,8 +47,8 @@ public class CollectionController {
             System.out.println("Error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
         }
-        System.out.println("updated collection" + id);
-        System.out.println(formData.title() + " " + formData.description());
+        collectionService.updateCollection(formData);
+
         return ResponseEntity.status(HttpStatus.OK).body(formData.title() + " " + formData.description());
     }
 
