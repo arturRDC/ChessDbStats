@@ -2,6 +2,8 @@ package com.chessdbstats.chessdbstats.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -24,6 +26,9 @@ public class User {
 
     @Column(name = "profile_picture")
     private String profilePicture;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Collection> collections;
 
     public User(String email, String password) {
         this.email = email;
@@ -81,5 +86,13 @@ public class User {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public List<Collection> getCollections() {
+        return collections;
+    }
+
+    public void setCollections(List<Collection> collections) {
+        this.collections = collections;
     }
 }
