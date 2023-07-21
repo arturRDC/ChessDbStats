@@ -5,7 +5,6 @@ import com.chessdbstats.chessdbstats.controller.EditCollectionFormData;
 import com.chessdbstats.chessdbstats.mapper.CollectionCollectionViewMapper;
 import com.chessdbstats.chessdbstats.model.Collection;
 import com.chessdbstats.chessdbstats.repository.CollectionRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,7 +56,7 @@ public class CollectionService {
     }
 
     public void updateCollection(EditCollectionFormData ecfd) {
-        if (collectionRepository.existsById(ecfd.id())) {
+        if (collectionRepository.findById(ecfd.id()).isPresent()) {
             Collection col = collectionRepository.findById(ecfd.id()).get();
             col.setTitle(ecfd.title());
             col.setDescription(ecfd.description());

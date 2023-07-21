@@ -1,9 +1,7 @@
 package com.chessdbstats.chessdbstats.controller;
 
-import com.chessdbstats.chessdbstats.auth.JwtUtil;
 import com.chessdbstats.chessdbstats.model.User;
 import com.chessdbstats.chessdbstats.service.CustomUserDetailsService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

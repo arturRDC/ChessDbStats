@@ -1,8 +1,5 @@
 package com.chessdbstats.chessdbstats.controller;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
-
 public class EditUserForm {
 
     private String email;

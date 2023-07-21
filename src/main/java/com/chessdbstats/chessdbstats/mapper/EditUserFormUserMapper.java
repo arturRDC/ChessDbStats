@@ -2,7 +2,6 @@ package com.chessdbstats.chessdbstats.mapper;
 
 import com.chessdbstats.chessdbstats.controller.EditUserForm;
 import com.chessdbstats.chessdbstats.model.User;
-import com.chessdbstats.chessdbstats.model.request.RegisterReq;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;

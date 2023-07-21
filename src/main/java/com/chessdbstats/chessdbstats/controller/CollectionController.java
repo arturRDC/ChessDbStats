@@ -5,8 +5,6 @@ import com.chessdbstats.chessdbstats.model.User;
 import com.chessdbstats.chessdbstats.service.CollectionService;
 import com.chessdbstats.chessdbstats.service.CustomUserDetailsService;
 import com.chessdbstats.chessdbstats.service.UserService;
-import com.github.bhlangonijr.chesslib.game.Game;
-import com.github.bhlangonijr.chesslib.pgn.PgnIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

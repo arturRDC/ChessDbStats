@@ -4,7 +4,6 @@ import com.chessdbstats.chessdbstats.controller.EditUserForm;
 import com.chessdbstats.chessdbstats.model.Collection;
 import com.chessdbstats.chessdbstats.model.User;
 import com.chessdbstats.chessdbstats.repository.UserRepositoryCustom;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -46,16 +46,6 @@ public class DashboardController {
         model.addAttribute("collectionId", collectionId);
 
         List<Player> players = statsService.getPlayers(collectionId);
-//        players.add(new Player("Player 1", 10, 5, 3, 18));
-//        players.add(new Player("Player 2", 8, 7, 2, 17));
-//        players.add(new Player("Player 3", 8, 7, 2, 17));
-//        players.add(new Player("Player 4", 8, 7, 2, 17));
-//        players.add(new Player("Player 5", 8, 7, 2, 17));
-//        players.add(new Player("Player 6", 8, 7, 2, 17));
-//        players.add(new Player("Player 7", 8, 7, 2, 17));
-//        players.add(new Player("Player 8", 8, 7, 2, 17));
-//        players.add(new Player("Player 9", 8, 7, 2, 17));
-//        players.add(new Player("Player 10", 8, 7, 2, 17));
 
         model.addAttribute("players", players);
         User loggedInUser = customUserDetailsService.getLoggedInUser();

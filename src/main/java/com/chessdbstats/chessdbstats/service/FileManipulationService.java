@@ -3,9 +3,10 @@ package com.chessdbstats.chessdbstats.service;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
