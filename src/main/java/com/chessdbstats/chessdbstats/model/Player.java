@@ -1,12 +1,13 @@
 package com.chessdbstats.chessdbstats.model;
 
 public class Player {
-    public Player(String name, Integer gamesWon, Integer gamesLost, Integer gamesDrawn, Integer totalGamesPlayed) {
+
+    public Player(String name) {
         this.name = name;
-        this.gamesWon = gamesWon;
-        this.gamesLost = gamesLost;
-        this.gamesDrawn = gamesDrawn;
-        this.totalGamesPlayed = totalGamesPlayed;
+        this.gamesWon = 0;
+        this.gamesLost = 0;
+        this.gamesDrawn = 0;
+        this.totalGamesPlayed = 0;
     }
 
     private String name;
@@ -30,6 +31,20 @@ public class Player {
     public void setGamesWon(Integer gamesWon) {
         this.gamesWon = gamesWon;
     }
+
+    public void incrementGamesWon() {
+        setGamesWon(getGamesWon() + 1);
+    }
+    public void incrementGamesLost() {
+        setGamesLost(getGamesLost() + 1);
+    }
+    public void incrementGamesDrawn() {
+        setGamesDrawn(getGamesDrawn() + 1);
+    }
+    public void incrementTotalGamesPlayed() {
+        setTotalGamesPlayed(getTotalGamesPlayed() + 1);
+    }
+
 
     public Integer getGamesLost() {
         return gamesLost;

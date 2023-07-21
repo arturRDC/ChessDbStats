@@ -1,12 +1,10 @@
 package com.chessdbstats.chessdbstats.controller;
 
 import com.chessdbstats.chessdbstats.model.Collection;
+import com.chessdbstats.chessdbstats.model.Player;
 import com.chessdbstats.chessdbstats.service.ChessOpeningsService;
 import com.chessdbstats.chessdbstats.service.CollectionService;
-import com.github.bhlangonijr.chesslib.game.Game;
-import com.github.bhlangonijr.chesslib.game.GameResult;
-import com.github.bhlangonijr.chesslib.game.Termination;
-import com.github.bhlangonijr.chesslib.game.TimeControl;
+import com.github.bhlangonijr.chesslib.game.*;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -309,19 +307,11 @@ public class StatsController {
             index++;
         }
 
-//        Object[][] data = {
-//                {"Date", "Number of Games"},
-//                {"2023.05.27", 8},
-//                {"2023.04.27", 15},
-//                {"2023.02.14", 12},
-//                {"2022.04.28", 20},
-//                {"2022.04.29", 7},
-//                {"2022.04.30", 2},
-//        };
         Gson gson = new Gson();
         String json = gson.toJson(data);
         return ResponseEntity.ok(json);
     }
+
     @GetMapping("api/v1/stats/square-frequencies/{collectionId}")
     public ResponseEntity<String> getSquareFrequencies(@PathVariable("collectionId") Long collectionId) {
         List<Map<String,Object>> squares = new ArrayList<>();

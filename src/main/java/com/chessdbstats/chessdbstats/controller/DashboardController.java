@@ -3,6 +3,7 @@ package com.chessdbstats.chessdbstats.controller;
 import com.chessdbstats.chessdbstats.model.Player;
 import com.chessdbstats.chessdbstats.model.User;
 import com.chessdbstats.chessdbstats.service.CustomUserDetailsService;
+import com.chessdbstats.chessdbstats.service.StatsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -18,6 +18,8 @@ import java.util.List;
 public class DashboardController {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private StatsService statsService;
     @GetMapping("{collectionId}")
     String getDashboard(Model model, @PathVariable("collectionId") Integer collectionId) {
         model.addAttribute("collectionId", collectionId);
@@ -40,20 +42,20 @@ public class DashboardController {
         return "logistics";
     }
     @GetMapping("players/{collectionId}")
-    String getPlayers(Model model, @PathVariable("collectionId") Integer collectionId) {
+    String getPlayers(Model model, @PathVariable("collectionId") Long collectionId) {
         model.addAttribute("collectionId", collectionId);
 
-        List<Player> players = new ArrayList<>();
-        players.add(new Player("Player 1", 10, 5, 3, 18));
-        players.add(new Player("Player 2", 8, 7, 2, 17));
-        players.add(new Player("Player 3", 8, 7, 2, 17));
-        players.add(new Player("Player 4", 8, 7, 2, 17));
-        players.add(new Player("Player 5", 8, 7, 2, 17));
-        players.add(new Player("Player 6", 8, 7, 2, 17));
-        players.add(new Player("Player 7", 8, 7, 2, 17));
-        players.add(new Player("Player 8", 8, 7, 2, 17));
-        players.add(new Player("Player 9", 8, 7, 2, 17));
-        players.add(new Player("Player 10", 8, 7, 2, 17));
+        List<Player> players = statsService.getPlayers(collectionId);
+//        players.add(new Player("Player 1", 10, 5, 3, 18));
+//        players.add(new Player("Player 2", 8, 7, 2, 17));
+//        players.add(new Player("Player 3", 8, 7, 2, 17));
+//        players.add(new Player("Player 4", 8, 7, 2, 17));
+//        players.add(new Player("Player 5", 8, 7, 2, 17));
+//        players.add(new Player("Player 6", 8, 7, 2, 17));
+//        players.add(new Player("Player 7", 8, 7, 2, 17));
+//        players.add(new Player("Player 8", 8, 7, 2, 17));
+//        players.add(new Player("Player 9", 8, 7, 2, 17));
+//        players.add(new Player("Player 10", 8, 7, 2, 17));
 
         model.addAttribute("players", players);
         User loggedInUser = customUserDetailsService.getLoggedInUser();
