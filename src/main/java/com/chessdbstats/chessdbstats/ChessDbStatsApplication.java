@@ -13,10 +13,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class ChessDbStatsApplication implements CommandLineRunner {
@@ -55,36 +55,6 @@ public class ChessDbStatsApplication implements CommandLineRunner {
         Collection col3 = new Collection(demo,"World Championship 2018", "World Championship Carlsen - Caruana");
         collectionService.createCollection(col3);
         fileManipulationService.appendFiles(col3.getPgnPath(), Paths.get("games", "demo3.pgn").toString());
-//        collectionService.uploadGames(file, 1L);
-
-
-//        Path filePath = Paths.get("games", "chusa23.pgn");
-//        PgnHolder pgn = new PgnHolder(filePath.toString());
-//        PgnHolder pgn = new PgnHolder("study.pgn");
-//        PgnHolder pgn2 = new PgnHolder("study3.pgn");
-//        try {
-//            pgn.loadPgn();
-//
-//            System.out.println("chusa magnus count " + pgn.countGamesInPgnFile());
-//
-//            pgn2.loadPgn();
-//            System.out.println("qatar magnus2 count " + pgn2.countGamesInPgnFile());
-//            pgn.setFileName("study2.pgn");
-//            pgn.loadPgn();
-//            System.out.println("both count " + pgn.countGamesInPgnFile());
-////            pgn.setFileName("study3.pgn");
-//            pgn.savePgn();
-//            List<Game> games = pgn.getGames();
-//            int count = 1;
-//            for (Game game : games) {
-//                System.out.println(count);
-//                System.out.println(game.getOpening());
-//                count++;
-//            }
-//        } catch (Exception e) {
-//            System.out.println("error");
-//            throw new RuntimeException(e);
-//        }
 
     }
 

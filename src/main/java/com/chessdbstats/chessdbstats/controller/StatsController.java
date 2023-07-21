@@ -4,6 +4,7 @@ import com.chessdbstats.chessdbstats.model.Collection;
 import com.chessdbstats.chessdbstats.model.Player;
 import com.chessdbstats.chessdbstats.service.ChessOpeningsService;
 import com.chessdbstats.chessdbstats.service.CollectionService;
+import com.chessdbstats.chessdbstats.service.StatsService;
 import com.github.bhlangonijr.chesslib.game.*;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 import com.google.gson.Gson;
@@ -24,6 +25,8 @@ public class StatsController {
     CollectionService collectionService;
     @Autowired
     ChessOpeningsService chessOpeningsService;
+    @Autowired
+    StatsService statsService;
 
     @GetMapping("api/v1/stats/openings/{collectionId}")
     public ResponseEntity<String> getOpenings(@PathVariable("collectionId") Long collectionId) {
@@ -314,72 +317,7 @@ public class StatsController {
 
     @GetMapping("api/v1/stats/square-frequencies/{collectionId}")
     public ResponseEntity<String> getSquareFrequencies(@PathVariable("collectionId") Long collectionId) {
-        List<Map<String,Object>> squares = new ArrayList<>();
-        squares.add(Map.of("row", '1', "col", 'a', "freq", 5));
-        squares.add(Map.of("row", '1', "col", 'b', "freq", 4));
-        squares.add(Map.of("row", '1', "col", 'c', "freq", 6));
-        squares.add(Map.of("row", '1', "col", 'd', "freq", 9));
-        squares.add(Map.of("row", '1', "col", 'e', "freq", 1));
-        squares.add(Map.of("row", '1', "col", 'f', "freq", 1));
-        squares.add(Map.of("row", '1', "col", 'g', "freq", 8));
-        squares.add(Map.of("row", '1', "col", 'h', "freq", 2));
-        squares.add(Map.of("row", '2', "col", 'a', "freq", 9));
-        squares.add(Map.of("row", '2', "col", 'b', "freq", 7));
-        squares.add(Map.of("row", '2', "col", 'c', "freq", 4));
-        squares.add(Map.of("row", '2', "col", 'd', "freq", 6));
-        squares.add(Map.of("row", '2', "col", 'e', "freq", 0));
-        squares.add(Map.of("row", '2', "col", 'f', "freq", 1));
-        squares.add(Map.of("row", '2', "col", 'g', "freq", 5));
-        squares.add(Map.of("row", '2', "col", 'h', "freq", 2));
-        squares.add(Map.of("row", '3', "col", 'a', "freq", 9));
-        squares.add(Map.of("row", '3', "col", 'b', "freq", 9));
-        squares.add(Map.of("row", '3', "col", 'c', "freq", 1));
-        squares.add(Map.of("row", '3', "col", 'd', "freq", 2));
-        squares.add(Map.of("row", '3', "col", 'e', "freq", 6));
-        squares.add(Map.of("row", '3', "col", 'f', "freq", 8));
-        squares.add(Map.of("row", '3', "col", 'g', "freq", 8));
-        squares.add(Map.of("row", '3', "col", 'h', "freq", 9));
-        squares.add(Map.of("row", '4', "col", 'a', "freq", 8));
-        squares.add(Map.of("row", '4', "col", 'b', "freq", 5));
-        squares.add(Map.of("row", '4', "col", 'c', "freq", 6));
-        squares.add(Map.of("row", '4', "col", 'd', "freq", 8));
-        squares.add(Map.of("row", '4', "col", 'e', "freq", 7));
-        squares.add(Map.of("row", '4', "col", 'f', "freq", 1));
-        squares.add(Map.of("row", '4', "col", 'g', "freq", 9));
-        squares.add(Map.of("row", '4', "col", 'h', "freq", 0));
-        squares.add(Map.of("row", '5', "col", 'a', "freq", 1));
-        squares.add(Map.of("row", '5', "col", 'b', "freq", 5));
-        squares.add(Map.of("row", '5', "col", 'c', "freq", 4));
-        squares.add(Map.of("row", '5', "col", 'd', "freq", 7));
-        squares.add(Map.of("row", '5', "col", 'e', "freq", 8));
-        squares.add(Map.of("row", '5', "col", 'f', "freq", 8));
-        squares.add(Map.of("row", '5', "col", 'g', "freq", 5));
-        squares.add(Map.of("row", '5', "col", 'h', "freq", 3));
-        squares.add(Map.of("row", '6', "col", 'a', "freq", 5));
-        squares.add(Map.of("row", '6', "col", 'b', "freq", 8));
-        squares.add(Map.of("row", '6', "col", 'c', "freq", 0));
-        squares.add(Map.of("row", '6', "col", 'd', "freq", 4));
-        squares.add(Map.of("row", '6', "col", 'e', "freq", 9));
-        squares.add(Map.of("row", '6', "col", 'f', "freq", 9));
-        squares.add(Map.of("row", '6', "col", 'g', "freq", 4));
-        squares.add(Map.of("row", '6', "col", 'h', "freq", 4));
-        squares.add(Map.of("row", '7', "col", 'a', "freq", 8));
-        squares.add(Map.of("row", '7', "col", 'b', "freq", 4));
-        squares.add(Map.of("row", '7', "col", 'c', "freq", 3));
-        squares.add(Map.of("row", '7', "col", 'd', "freq", 1));
-        squares.add(Map.of("row", '7', "col", 'e', "freq", 1));
-        squares.add(Map.of("row", '7', "col", 'f', "freq", 3));
-        squares.add(Map.of("row", '7', "col", 'g', "freq", 7));
-        squares.add(Map.of("row", '7', "col", 'h', "freq", 8));
-        squares.add(Map.of("row", '8', "col", 'a', "freq", 8));
-        squares.add(Map.of("row", '8', "col", 'b', "freq", 1));
-        squares.add(Map.of("row", '8', "col", 'c', "freq", 9));
-        squares.add(Map.of("row", '8', "col", 'd', "freq", 1));
-        squares.add(Map.of("row", '8', "col", 'e', "freq", 3));
-        squares.add(Map.of("row", '8', "col", 'f', "freq", 6));
-        squares.add(Map.of("row", '8', "col", 'g', "freq", 4));
-        squares.add(Map.of("row", '8', "col", 'h', "freq", 8));
-
+        List<Map<String, Object>> squares = statsService.getSquareFrequencies(collectionId);
         Gson gson = new Gson();
         String json = gson.toJson(squares);
         return ResponseEntity.ok(json);
