@@ -4,6 +4,7 @@ import com.chessdbstats.chessdbstats.controller.CollectionView;
 import com.chessdbstats.chessdbstats.controller.EditCollectionFormData;
 import com.chessdbstats.chessdbstats.mapper.CollectionCollectionViewMapper;
 import com.chessdbstats.chessdbstats.model.Collection;
+import com.chessdbstats.chessdbstats.model.User;
 import com.chessdbstats.chessdbstats.repository.CollectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public class CollectionService {
     FileManipulationService fileManipulationService;
     @Autowired
     CollectionCollectionViewMapper collectionCollectionViewMapper;
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
 
 
 
@@ -100,8 +103,9 @@ public class CollectionService {
     }
 
     public List<CollectionView> listCollections() {
+        User loggedInUser = customUserDetailsService.getLoggedInUser();
         List<Collection> collectionViews = new ArrayList<>();
-        collectionRepository.findAll().forEach(collectionViews::add);
+        collectionRepository.findAllByUser(loggedInUser).forEach(collectionViews::add);
         return collectionViews.stream().map(collectionCollectionViewMapper).collect(Collectors.toList());
     }
 }
